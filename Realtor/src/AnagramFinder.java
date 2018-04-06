@@ -28,8 +28,8 @@ public class AnagramFinder {
 			System.out.println("Invalid File: Please provide valid file");
 			e1.printStackTrace();
 		}
-		HashMap<Integer, ArrayList<String>> dictData = new HashMap<Integer, ArrayList<String>>();
-		loadFile(br, dictData);
+		HashMap<Integer, ArrayList<String>> dictionaryData = new HashMap<Integer, ArrayList<String>>();
+		loadFile(br, dictionaryData);
 
 		long fileLoadEndTime = System.nanoTime();
 
@@ -43,7 +43,7 @@ public class AnagramFinder {
 				input = input.toLowerCase();
 				if (!input.equalsIgnoreCase("exit")) {
 					long sTime = System.nanoTime();
-					ExecutorService e = threadPool(dictData, input);
+					ExecutorService e = threadPool(dictionaryData, input);
 					long eTime = System.nanoTime();
 					if (e.isTerminated()) {
 						if (AnagramAlgo.l.size() > 0) {
@@ -73,9 +73,9 @@ public class AnagramFinder {
 		}
 	}
 
-	private static ExecutorService threadPool(HashMap<Integer, ArrayList<String>> dictData, String input)
+	private static ExecutorService threadPool(HashMap<Integer, ArrayList<String>> dictionaryData, String input)
 			throws InterruptedException {
-		ArrayList<String> filteredData = dictData.get(input.length());
+		ArrayList<String> filteredData = dictionaryData.get(input.length());
 		ExecutorService e = Executors.newFixedThreadPool(3);
 		for (String p : filteredData) {
 			Runnable r = new AnagramAlgo(input, p);
@@ -86,16 +86,16 @@ public class AnagramFinder {
 		return e;
 	}
 
-	private static void loadFile(BufferedReader br, HashMap<Integer, ArrayList<String>> dictData) throws IOException {
+	private static void loadFile(BufferedReader br, HashMap<Integer, ArrayList<String>> dictionaryData) throws IOException {
 		String st;
 		ArrayList<String> list;
 		while ((st = br.readLine()) != null) {
-			if (dictData.get(st.length()) != null) {
-				dictData.get(st.length()).add(st);
+			if (dictionaryData.get(st.length()) != null) {
+				dictionaryData.get(st.length()).add(st);
 			} else {
 				list = new ArrayList<String>();
 				list.add(st);
-				dictData.put(st.length(), list);
+				dictionaryData.put(st.length(), list);
 			}
 		}
 		br.close();
